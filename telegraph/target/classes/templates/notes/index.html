@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:HH="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Telegraph 2.0</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/notes/add}">Add note</a>
+            </li>
+        </ul>
+        <form class="form-inline" action="/notes/category" method="get">
+            <input class="form-control mr-sm-2" type="text" name = "hash" placeholder="Search by hashtag...">
+            <input class="btn btn-success" type="submit" value="Search">
+        </form>
+    </div>
+</nav>
+<div class="note-container" th:switch="${notes}" >
+    <h2 th:case="null">No notes yet!</h2>
+    <div class="center" th:case="*" >
+        <div class="card border-primary mb-3" th:each="note: ${notes}">
+            <div class="card-header" >
+                <h3 th:text="${note.getAuthor()}"></h3>
+                <div class="card-categories" th:utext="${note.getListCategories()}"></div>
+            </div>
+
+            <div class="card-body text-primary">
+                <h5 class="card-title" th:text="${note.getTitle()}"></h5>
+            <p class="card-text" >
+                <p th:utext="${note.getText()}"></p>
+            </p>
+            <div class="btn-group" role="group">
+        <a class="btn btn-primary" th:href="@{/notes/edit/{id}(id=${note.getId()})}">Edit</a>
+        <a class="btn btn-danger" th:onclick="return confirm('Are you sure?')" th:href="@{/notes/delete/{id}(id=${note.getId()})}">Delete</a>
+        <a class="btn btn-info" th:href="@{/notes/{id}(id=${note.getId()})}">Show</a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${note.getTitle()}">Title</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" th:href="@{/css/noteStyle.css}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"></head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/notes}" th:onclick="return confirm('Are you sure?')">Home <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="note-container" th:switch="${note}" >
+    <h2 th:case="null">No such note!</h2>
+    <div class="center" th:case="*" >
+        <div class="card border-primary mb-3">
+            <div class="card-header" >
+                <h3 th:text="${note.getAuthor()}"></h3>
+                <div class="card-categories" th:utext="${note.getListCategories()}"></div>
+            </div>
+
+            <div class="card-body text-primary">
+                <h5 class="card-title" th:text="${note.getTitle()}"></h5>
+                <p class="card-text" >
+                <p th:utext="${note.getText()}"></p>
+                </p>
+                <input type="text" id="link" readonly="readonly"><br>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary" onclick="copyLink()" th:href="@{/notes/edit/{id}(id=${note.getId()})}">Get link to this note</a>
+                    <a class="btn btn-warning" th:onclick="return confirm('Are you sure?')" th:href="@{/notes}">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.getElementById("link").value=window.location.href.toString();
+    function copyLink() {
+        var copyText = document.getElementById("link");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+    }
+</script>
+</body>
+</html>
